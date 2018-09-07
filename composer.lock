@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "630d5f1d19e73b0163f900453171fba5",
+    "content-hash": "654b03d5d99550350c5bfa4b0d8c142f",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -168,6 +168,55 @@
             "time": "2017-07-16T21:13:23+00:00"
         },
         {
+            "name": "cetver/yii2-validation-filters",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cetver/yii2-validation-filters.git",
+                "reference": "44812874e65cd3f8d07b5f713fc8517d4d84bd38"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cetver/yii2-validation-filters/zipball/44812874e65cd3f8d07b5f713fc8517d4d84bd38",
+                "reference": "44812874e65cd3f8d07b5f713fc8517d4d84bd38",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "npm-asset/locutus": "^2.0",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "require-dev": {
+                "bower-asset/qunit": "^2.6",
+                "codeception/base": "^2.2",
+                "php-coveralls/php-coveralls": "^1.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "cetver\\ValidationFilters\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandr Cetvertacov",
+                    "email": "cetver@gmail.com"
+                }
+            ],
+            "description": "Validation filters for the Yii framework 2.0",
+            "keywords": [
+                "filter",
+                "filters",
+                "validation",
+                "yii2"
+            ],
+            "time": "2018-09-02T20:54:30+00:00"
+        },
+        {
             "name": "doctrine/lexer",
             "version": "v1.0.1",
             "source": {
@@ -324,6 +373,20 @@
                 "html"
             ],
             "time": "2018-02-23T01:58:20+00:00"
+        },
+        {
+            "name": "npm-asset/locutus",
+            "version": "2.0.9",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/locutus/-/locutus-2.0.9.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "swiftmailer/swiftmailer",

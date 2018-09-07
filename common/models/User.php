@@ -157,6 +157,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Generates password hash from password and sets it to the model
      *
      * @param string $password
+     * @throws \yii\base\Exception
      */
     public function setPassword($password)
     {

@@ -1,4 +1,6 @@
 <?php
+
 return [
-    'adminEmail' => 'admin@example.com',
+    'pageSizeForUserList' => 5,
+    'pageSizeForUserAddressesList' => 5,
 ];
