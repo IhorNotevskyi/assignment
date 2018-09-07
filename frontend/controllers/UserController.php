@@ -2,11 +2,11 @@
 
 namespace frontend\controllers;
 
-use frontend\components\DropDownListHelper;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use frontend\components\PaginationHelper;
+use frontend\components\DropDownListHelper;
 use yii\web\Controller;
 use frontend\models\User;
 use frontend\models\Address;
@@ -94,7 +94,6 @@ class UserController extends Controller
         $user = new User();
         $user->gender = User::GENDER_NO_INFORMATION;
         $address = new Address();
-        $countryCodeList = DropDownListHelper::getCountryCodeList();
 
         $transaction = Yii::$app->db->beginTransaction();
 
@@ -116,6 +115,8 @@ class UserController extends Controller
             Yii::$app->session->setFlash('error', 'Не удалось добавить нового пользователя');
         }
 
+        $countryCodeList = DropDownListHelper::getCountryCodeList();
+
         return $this->render('add', [
             'user' => $user,
             'address' => $address,
@@ -132,8 +133,7 @@ class UserController extends Controller
     {
         $user = User::findOne($id);
         (new QueryHelper())->checkQuery($user);
-
-        $user->password_repeat = $user->password;
+        $user->password = '';
 
         if ($user->load(Yii::$app->request->post()) && $user->save()) {
             Yii::$app->session->setFlash('success', 'Данные пользователя успешно отредактированы');

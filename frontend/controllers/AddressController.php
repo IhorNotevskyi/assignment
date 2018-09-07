@@ -3,11 +3,13 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\components\DropDownListHelper;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use frontend\components\DropDownListHelper;
 use frontend\models\User;
 use frontend\models\Address;
+use frontend\models\UserToAddress;
 use frontend\components\QueryHelper;
 use yii\web\NotFoundHttpException;
 
@@ -41,42 +43,41 @@ class AddressController extends Controller
     {
         $userId = (int)strip_tags($usr);
         $address = new Address();
-        $countryCodeList = DropDownListHelper::getCountryCodeList();
+        $userToAddress = new UserToAddress();
 
-        $transaction = Yii::$app->db->beginTransaction();
+        $postAddressParams = Yii::$app->request->post('Address');
+        $identicalAddress = $address->findIdenticalAddress($postAddressParams);
 
-//        $postAddressParams = Yii::$app->request->post('Address');
-//
-//        $identicalAddress = Address::find()->where([
-//            'postcode' => $postAddressParams['postcode'],
-//            'country_code_id' => $postAddressParams['country_code_id'],
-//            'city' => $postAddressParams['city'],
-//            'street' => $postAddressParams['street'],
-//            'house_number' => $postAddressParams['house_number'],
-//            'apartment_number' => $postAddressParams['apartment_number'],
-//        ])->all();
+        if ($identicalAddress) {
+            $identicalAddressId = current(ArrayHelper::getColumn((array)$identicalAddress, 'id'));
+            $identicalUserToAddress = $userToAddress->findIdenticalData($userId, $identicalAddressId);
 
-//        $iDidenticalAddress = current(ArrayHelper::getColumn($identicalAddress, 'id'));
-
-//        var_dump(current(ArrayHelper::getColumn($identicalAddress, 'id'))); die;
-
-        try {
-            if ($address->load(Yii::$app->request->post()) && $address->save()) {
-                Yii::$app->db->createCommand()->insert('user_to_address', [
-                    'user_id' => $userId,
-                    'address_id' => $address->id,
-                ])->execute();
-
-                $transaction->commit();
-
+            if (!$identicalUserToAddress) {
+                $userToAddress->insertNewData($userId, $identicalAddressId);
                 Yii::$app->session->setFlash('success', 'Новый адрес успешно добавлен');
-
-                return $this->refresh();
+            } else {
+                Yii::$app->session->setFlash('error', 'Данный адрес уже существует у пользователя');
             }
-        } catch (\Exception $exception) {
-            $transaction->rollback();
-            Yii::$app->session->setFlash('error', 'Не удалось добавить новый адрес');
+
+            return $this->refresh();
+        } else {
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                if ($address->load(Yii::$app->request->post()) && $address->save()) {
+                    $userToAddress->insertNewData($userId, $address->id);
+                    $transaction->commit();
+                    Yii::$app->session->setFlash('success', 'Новый адрес успешно добавлен');
+
+                    return $this->refresh();
+                }
+            } catch (\Exception $exception) {
+                $transaction->rollback();
+                Yii::$app->session->setFlash('error', 'Не удалось добавить новый адрес');
+            }
         }
+
+        $countryCodeList = DropDownListHelper::getCountryCodeList();
 
         return $this->render('add', [
             'userId' => $userId,
@@ -97,13 +98,14 @@ class AddressController extends Controller
         $addressId = (int)strip_tags($id);
         $address = Address::findOne($addressId);
         (new QueryHelper())->checkQuery($address);
-        $countryCodeList = DropDownListHelper::getCountryCodeList();
 
         if ($address->load(Yii::$app->request->post()) && $address->save()) {
             Yii::$app->session->setFlash('success', 'Адрес успешно отредактирован');
 
             return $this->refresh();
         }
+
+        $countryCodeList = DropDownListHelper::getCountryCodeList();
 
         return $this->render('edit', [
             'userId' => $userId,

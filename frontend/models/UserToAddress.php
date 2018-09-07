@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 
@@ -41,18 +42,6 @@ class UserToAddress extends ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'address_id' => 'Address ID',
-            'user_id' => 'User ID',
-        ];
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getAddress()
@@ -68,6 +57,10 @@ class UserToAddress extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * @param int $addressId
+     * @return array
+     */
     public function getIdByAddressId($addressId)
     {
         return (new Query())
@@ -75,5 +68,31 @@ class UserToAddress extends ActiveRecord
             ->from('user_to_address')
             ->where('address_id = :address', [':address' => $addressId])
             ->all();
+    }
+
+    /**
+     * @param int $userId
+     * @param int $addressId
+     * @throws \yii\db\Exception
+     */
+    public function insertNewData($userId, $addressId)
+    {
+        Yii::$app->db->createCommand()->insert('user_to_address', [
+            'user_id' => $userId,
+            'address_id' => $addressId
+        ])->execute();
+    }
+
+    /**
+     * @param int $userId
+     * @param int $addressId
+     * @return UserToAddress|null
+     */
+    public function findIdenticalData($userId, $addressId)
+    {
+        return self::findOne([
+            'user_id' => $userId,
+            'address_id' => $addressId
+        ]);
     }
 }
