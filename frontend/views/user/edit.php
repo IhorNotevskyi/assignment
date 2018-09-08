@@ -7,11 +7,11 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = "Редактировать пользователя (ID: {$user->id})";
+$this->title = "Редактировать данные пользователя (ID: {$user->id})";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <br>
-<h1 class="text-center"><?= Html::encode($this->title) ?></h1>
+<h1 class="text-center col-md-6 col-md-offset-3"><?= Html::encode($this->title) ?></h1>
 <br>
 <br>
 <div class="col-md-6 col-md-offset-3">
@@ -26,4 +26,5 @@ $this->params['breadcrumbs'][] = $this->title;
         <br>
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary']); ?>
     <?php ActiveForm::end(); ?>
+    <br>
 </div>

@@ -91,6 +91,7 @@ class AddressController extends Controller
      * @param int $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
      */
     public function actionEdit($usr, $id)
     {
@@ -98,11 +99,29 @@ class AddressController extends Controller
         $addressId = (int)strip_tags($id);
         $address = Address::findOne($addressId);
         (new QueryHelper())->checkQuery($address);
+        $userToAddress = new UserToAddress();
 
-        if ($address->load(Yii::$app->request->post()) && $address->save()) {
-            Yii::$app->session->setFlash('success', 'Адрес успешно отредактирован');
+        $postAddressParams = Yii::$app->request->post('Address');
+        $identicalAddress = $address->findIdenticalAddress($postAddressParams);
+
+        if ($identicalAddress) {
+            $identicalAddressId = current(ArrayHelper::getColumn((array)$identicalAddress, 'id'));
+            $identicalUserToAddress = $userToAddress->findIdenticalData($userId, $identicalAddressId);
+
+            if (!$identicalUserToAddress) {
+                $userToAddress->insertNewData($userId, $identicalAddressId);
+                Yii::$app->session->setFlash('success', 'Адрес успешно отредактирован');
+            } else {
+                Yii::$app->session->setFlash('error', 'Данный адрес уже существует у пользователя');
+            }
 
             return $this->refresh();
+        } else {
+            if ($address->load(Yii::$app->request->post()) && $address->save()) {
+                Yii::$app->session->setFlash('success', 'Адрес успешно отредактирован');
+
+                return $this->refresh();
+            }
         }
 
         $countryCodeList = DropDownListHelper::getCountryCodeList();

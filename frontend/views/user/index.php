@@ -37,7 +37,7 @@ $this->title = 'Список всех пользователей';
         </div>
         <div class="col-lg-12 text-right">
             <?= Html::a('Просмотреть', ['user/view', 'id' => Html::encode($user->id)], [
-                'class' => 'btn btn-warning',
+                'class' => 'btn btn-info',
             ]) ?>
             <?= Html::a('Редактировать', ['user/edit', 'id' => Html::encode($user->id)], [
                 'class' => 'btn btn-primary',
