@@ -26,13 +26,13 @@ $this->title = 'Список всех пользователей';
             <div class="col-lg-6 text-center">
                 <p>Логин: <span class="text-muted"><?= Html::encode($user->login) ?></span></p>
                 <p>Email: <span class="text-muted"><?= Html::encode($user->email) ?></span></p>
+                <p>Пол: <span class="text-muted"><?= Html::encode($user->getGenderValue($user->gender)) ?></span></p>
                 <p>Дата создания: <span class="text-muted"><?= Html::encode($user->getFormatCreatedAt($user->created_at)) ?></span></p>
-                <p>Количество адресов: <span class="text-muted"><?= count($user->getAddresses()) ?></span></p>
             </div>
             <div class="col-lg-6 text-center">
                 <p>Имя: <span class="text-muted"><?= Html::encode($user->first_name) ?></span></p>
                 <p>Фамилия: <span class="text-muted"><?= Html::encode($user->last_name) ?></span></p>
-                <p>Пол: <span class="text-muted"><?= Html::encode($user->getGenderValue($user->gender)) ?></span></p>
+                <p>Количество адресов: <span class="text-muted"><?= count($user->getAddresses()) ?></span></p>
             </div>
         </div>
         <div class="col-lg-12 text-right">

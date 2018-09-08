@@ -43,7 +43,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'users' => 'user/index',
+                '' => 'user/index',
                 'user/view/<id:\d+/?>' => 'user/view',
                 'user/edit/<id:\d+/?>' => 'user/edit',
                 'user/delete/<id:\d+/?>' => 'user/delete',

@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 $this->title = 'Добавить новый адрес';
+
 $this->params['breadcrumbs'][] = [
     'label' => "Просмотр информации о пользователе (ID: {$userId})",
     'url' => ['user/view/', 'id' => $userId]

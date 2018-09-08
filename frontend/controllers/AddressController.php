@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use frontend\components\DropDownListHelper;
 use frontend\models\User;
