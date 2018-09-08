@@ -41,7 +41,7 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-        $users = User::find();
+        $users = User::find()->orderBy(['created_at' => SORT_DESC]);
         (new QueryHelper())->checkQuery($users);
 
         $paginationData = (new PaginationHelper())->createPagination(
