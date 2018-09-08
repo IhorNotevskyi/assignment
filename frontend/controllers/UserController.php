@@ -95,6 +95,19 @@ class UserController extends Controller
         $user = new User();
         $user->gender = User::GENDER_NO_INFORMATION;
         $address = new Address();
+        $trueMessage = 'Новый пользователь успешно добавлен';
+
+        $postAddressParams = Yii::$app->request->post('Address');
+        $identicalAddress = $address->findIdenticalAddress($postAddressParams);
+
+        if ($identicalAddress) {
+            if ($user->load(Yii::$app->request->post()) && $address->load(Yii::$app->request->post()) && $user->save()) {
+                (new UserToAddress())->insertNewData($user->id, $identicalAddress['id']);
+                Yii::$app->session->setFlash('success', $trueMessage);
+
+                return $this->refresh();
+            }
+        }
 
         $transaction = Yii::$app->db->beginTransaction();
 
@@ -102,7 +115,7 @@ class UserController extends Controller
             if ($user->load(Yii::$app->request->post()) && $address->load(Yii::$app->request->post()) && $user->save() && $address->save()) {
                 (new UserToAddress())->insertNewData($user->id, $address->id);
                 $transaction->commit();
-                Yii::$app->session->setFlash('success', 'Новый пользователь успешно добавлен');
+                Yii::$app->session->setFlash('success', $trueMessage);
 
                 return $this->refresh();
             }
