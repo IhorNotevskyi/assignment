@@ -64,6 +64,7 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        $id = (int)strip_tags($id);
         $user = User::findOne($id);
         (new QueryHelper())->checkQuery($user);
 
@@ -99,13 +100,8 @@ class UserController extends Controller
 
         try {
             if ($user->load(Yii::$app->request->post()) && $address->load(Yii::$app->request->post()) && $user->save() && $address->save()) {
-                Yii::$app->db->createCommand()->insert('user_to_address', [
-                    'user_id' => $user->id,
-                    'address_id' => $address->id,
-                ])->execute();
-
+                (new UserToAddress())->insertNewData($user->id, $address->id);
                 $transaction->commit();
-
                 Yii::$app->session->setFlash('success', 'Новый пользователь успешно добавлен');
 
                 return $this->refresh();
@@ -131,6 +127,7 @@ class UserController extends Controller
      */
     public function actionEdit($id)
     {
+        $id = (int)strip_tags($id);
         $user = User::findOne($id);
         (new QueryHelper())->checkQuery($user);
         $user->password = '';
@@ -152,6 +149,7 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
+        $id = (int)strip_tags($id);
         $user = User::findOne($id);
         (new QueryHelper())->checkQuery($user);
 

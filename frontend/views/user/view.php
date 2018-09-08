@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <table class="table table-bordered text-center">
             <thead>
             <tr>
+                <th class="text-center">ID</th>
                 <th class="text-center">Почтовый индекс</th>
                 <th class="text-center">Код страны</th>
                 <th class="text-center">Название города</th>
@@ -52,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </thead>
             <tbody>
                 <tr>
+                    <td><?= Html::encode($address->id) ?></td>
                     <td><?= Html::encode($address->postcode) ?></td>
                     <td><?= Html::encode($address->getCountry()->country_code) ?></td>
                     <td><?= Html::encode($address->city) ?></td>

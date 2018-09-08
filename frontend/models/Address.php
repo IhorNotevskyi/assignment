@@ -24,6 +24,11 @@ use frontend\components\SpacesFilterHelper;
 class Address extends ActiveRecord
 {
     /**
+     * @var array
+     */
+    public $attributes;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -65,6 +70,22 @@ class Address extends ActiveRecord
             'house_number' => 'Номер дома',
             'apartment_number' => 'Номер офиса/квартиры',
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeValidate()
+    {
+        $this->id = strip_tags($this->id);
+        $this->postcode = strip_tags($this->postcode);
+        $this->country_code_id = strip_tags($this->country_code_id);
+        $this->city = strip_tags($this->city);
+        $this->street = strip_tags($this->street);
+        $this->house_number = strip_tags($this->house_number);
+        $this->apartment_number = strip_tags($this->apartment_number);
+
+        return parent::beforeValidate();
     }
 
     /**

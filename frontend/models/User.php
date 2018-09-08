@@ -70,6 +70,22 @@ class User extends ActiveRecord
     }
 
     /**
+     * @return bool
+     */
+    public function beforeValidate()
+    {
+        $this->id = strip_tags($this->id);
+        $this->login = strip_tags($this->login);
+        $this->email = strip_tags($this->email);
+        $this->first_name = strip_tags($this->first_name);
+        $this->last_name = strip_tags($this->last_name);
+        $this->created_at = strip_tags($this->created_at);
+        $this->gender = strip_tags($this->gender);
+
+        return parent::beforeValidate();
+    }
+
+    /**
      * @param bool $insert
      * @return bool
      * @throws \yii\base\Exception

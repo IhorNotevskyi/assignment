@@ -44,17 +44,17 @@ class AddressController extends Controller
         $userId = (int)strip_tags($usr);
         $address = new Address();
         $userToAddress = new UserToAddress();
+        $trueMessage = 'Новый адрес успешно добавлен';
 
         $postAddressParams = Yii::$app->request->post('Address');
         $identicalAddress = $address->findIdenticalAddress($postAddressParams);
 
         if ($identicalAddress) {
-            $identicalAddressId = current(ArrayHelper::getColumn((array)$identicalAddress, 'id'));
-            $identicalUserToAddress = $userToAddress->findIdenticalData($userId, $identicalAddressId);
+            $identicalUserToAddress = $userToAddress->findIdenticalData($userId, $identicalAddress['id']);
 
             if (!$identicalUserToAddress) {
-                $userToAddress->insertNewData($userId, $identicalAddressId);
-                Yii::$app->session->setFlash('success', 'Новый адрес успешно добавлен');
+                $userToAddress->insertNewData($userId, $identicalAddress['id']);
+                Yii::$app->session->setFlash('success', $trueMessage);
             } else {
                 Yii::$app->session->setFlash('error', 'Данный адрес уже существует у пользователя');
             }
@@ -67,7 +67,7 @@ class AddressController extends Controller
                 if ($address->load(Yii::$app->request->post()) && $address->save()) {
                     $userToAddress->insertNewData($userId, $address->id);
                     $transaction->commit();
-                    Yii::$app->session->setFlash('success', 'Новый адрес успешно добавлен');
+                    Yii::$app->session->setFlash('success', $trueMessage);
 
                     return $this->refresh();
                 }
@@ -99,18 +99,19 @@ class AddressController extends Controller
         $addressId = (int)strip_tags($id);
         $address = Address::findOne($addressId);
         (new QueryHelper())->checkQuery($address);
+
         $userToAddress = new UserToAddress();
+        $trueMessage = 'Адрес успешно отредактирован';
 
         $postAddressParams = Yii::$app->request->post('Address');
         $identicalAddress = $address->findIdenticalAddress($postAddressParams);
 
         if ($identicalAddress) {
-            $identicalAddressId = current(ArrayHelper::getColumn((array)$identicalAddress, 'id'));
-            $identicalUserToAddress = $userToAddress->findIdenticalData($userId, $identicalAddressId);
+            $identicalUserToAddress = $userToAddress->findIdenticalData($userId, $identicalAddress['id']);
 
             if (!$identicalUserToAddress) {
-                $userToAddress->insertNewData($userId, $identicalAddressId);
-                Yii::$app->session->setFlash('success', 'Адрес успешно отредактирован');
+                $userToAddress->insertNewData($userId, $identicalAddress['id']);
+                Yii::$app->session->setFlash('success', $trueMessage);
             } else {
                 Yii::$app->session->setFlash('error', 'Данный адрес уже существует у пользователя');
             }
@@ -118,7 +119,7 @@ class AddressController extends Controller
             return $this->refresh();
         } else {
             if ($address->load(Yii::$app->request->post()) && $address->save()) {
-                Yii::$app->session->setFlash('success', 'Адрес успешно отредактирован');
+                Yii::$app->session->setFlash('success', $trueMessage);
 
                 return $this->refresh();
             }
