@@ -1,12 +1,12 @@
 <?php
 
-namespace frontend\components;
+namespace frontend\helpers;
 
 use yii\web\NotFoundHttpException;
 
 /**
  * Class QueryHelper
- * @package frontend\components
+ * @package frontend\helpers
  */
 class QueryHelper
 {

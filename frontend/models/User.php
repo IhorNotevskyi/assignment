@@ -5,7 +5,6 @@ namespace frontend\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use frontend\components\SpacesFilterHelper;
 
 /**
  * This is the model class for table "user".
@@ -50,6 +49,11 @@ class User extends ActiveRecord
         return [
             [['login', 'password', 'password_repeat', 'first_name', 'last_name', 'email'], 'required'],
             [['password_repeat'], 'compare', 'compareAttribute' => 'password', 'message' => "Пароли не совпадают"],
+
+            [['login', 'first_name', 'last_name'], 'filter', 'filter' => function ($value) {
+                return preg_replace('/\s+/', ' ', strip_tags($value));
+            }],
+
             [['login', 'first_name', 'last_name', 'email'], 'trim'],
 
             [['login'], 'unique', 'targetClass' => User::className()],
@@ -70,32 +74,12 @@ class User extends ActiveRecord
     }
 
     /**
-     * @return bool
-     */
-    public function beforeValidate()
-    {
-        $this->id = strip_tags($this->id);
-        $this->login = strip_tags($this->login);
-        $this->email = strip_tags($this->email);
-        $this->first_name = strip_tags($this->first_name);
-        $this->last_name = strip_tags($this->last_name);
-        $this->created_at = strip_tags($this->created_at);
-        $this->gender = strip_tags($this->gender);
-
-        return parent::beforeValidate();
-    }
-
-    /**
      * @param bool $insert
      * @return bool
      * @throws \yii\base\Exception
      */
     public function beforeSave($insert) {
         $this->password = Yii::$app->security->generatePasswordHash($this->password);
-
-        $this->login = SpacesFilterHelper::removeUnnecessarySpaces($this->login);
-        $this->first_name = SpacesFilterHelper::removeUnnecessarySpaces($this->first_name);
-        $this->last_name = SpacesFilterHelper::removeUnnecessarySpaces($this->last_name);
 
         return parent::beforeSave($insert);
     }

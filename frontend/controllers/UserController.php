@@ -5,13 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use frontend\components\PaginationHelper;
-use frontend\components\DropDownListHelper;
+use frontend\helpers\PaginationHelper;
+use frontend\helpers\DropDownListHelper;
 use yii\web\Controller;
 use frontend\models\User;
 use frontend\models\Address;
 use frontend\models\UserToAddress;
-use frontend\components\QueryHelper;
+use frontend\helpers\QueryHelper;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -108,6 +108,8 @@ class UserController extends Controller
             }
         } catch (\Exception $exception) {
             $transaction->rollback();
+            $user->password = '';
+            $user->password_repeat = '';
             Yii::$app->session->setFlash('error', 'Не удалось добавить нового пользователя');
         }
 

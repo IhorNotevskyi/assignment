@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\components;
+namespace frontend\helpers;
 
 use Yii;
 use yii\data\Pagination;
@@ -8,7 +8,7 @@ use yii\web\NotFoundHttpException;
 
 /**
  * Class PaginationHelper
- * @package frontend\components
+ * @package frontend\helpers
  */
 class PaginationHelper
 {

@@ -5,11 +5,11 @@ namespace frontend\controllers;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use frontend\components\DropDownListHelper;
+use frontend\helpers\DropDownListHelper;
 use frontend\models\User;
 use frontend\models\Address;
 use frontend\models\UserToAddress;
-use frontend\components\QueryHelper;
+use frontend\helpers\QueryHelper;
 use yii\web\NotFoundHttpException;
 
 /**

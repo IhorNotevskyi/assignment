@@ -1,13 +1,13 @@
 <?php
 
-namespace frontend\components;
+namespace frontend\helpers;
 
 use frontend\models\Country;
 use yii\helpers\ArrayHelper;
 
 /**
  * Class DropDownListHelper
- * @package frontend\components
+ * @package frontend\helpers
  */
 class DropDownListHelper
 {
